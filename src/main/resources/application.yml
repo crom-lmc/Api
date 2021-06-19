@@ -6,7 +6,7 @@ server:
 #聚合数据彩票数据接口key
 polymerization:
   lottery:
-    key: b819c306f2cd21b13b241ea12525972a
+    key: 填写你自己申请的聚合数据key
 
 mybatis-plus:
   global-config:
@@ -21,9 +21,9 @@ spring:
   profiles:
     active: local
   mail:
-    host: smtp.126.com
-    username: laimch@126.com
-    password: MDJAYROIUYWGUECH
+    host: 
+    username: 
+    password: 
     default-encoding: UTF-8
     properties:
       mail:
@@ -36,7 +36,7 @@ spring:
             class: javax.net.ssl.SSLSocketFactory
             port: 465
           ssl:
-            trust: smtp.126.com
+            trust: 
   thymeleaf:
     # 禁用缓存
     cache: false
@@ -46,4 +46,4 @@ spring:
 
 mail:
   fromMail:
-    addr: laimch@126.com
+    addr: 
