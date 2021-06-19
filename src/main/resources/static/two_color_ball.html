@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <title>双色球</title>
+    <link rel="icon" href="favicon.ico" type="image/ico">
+    <meta name="author" content="Crom.lai">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="js/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link type="text/css" href="js/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <style type="text/css">
+
+        .trend-chart > thead > tr > td {
+            padding: 0px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .trend-chart > tbody > tr > td {
+            padding: 0px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .ball {
+            font-size: 12px;
+            font-family: 宋体;
+        }
+
+        .red-winning-numbers {
+            font-weight: bold;
+            color: #fff;
+            background: #F3F2F2 url("image/chartBall01.gif") no-repeat center;
+        }
+
+        .blue-winning-numbers {
+            font-weight: bold;
+            color: #fff;
+            background: #F3F2F2 url("image/chartBall02.gif") no-repeat center;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="container-fluid p-t-15">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <header class="card-header">
+                    <div class="card-title float-left">双色球</div>
+                    <div class="float-right" style="padding-right: 24px;">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                订阅/取消订阅
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="javascript:showAlert('active')">订阅</a></li>
+                                <li><a class="dropdown-item" href="javascript:showAlert(null)">取消订阅</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </header>
+                <div class="card-body">
+                    <div class="row">
+                        <ul class="nav nav-tabs nav-fill hidden-lg hidden-md">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="pill" href="#v-current-lottery-number"
+                                   aria-selected="true">本期开奖</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="pill" href="#v-history-lottery-number"
+                                   aria-selected="false">历史开奖</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link" data-toggle="pill" href="#v-trend-chart"
+                                   aria-selected="false">走势图</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="pill" href="#v-bonus-comparison-table"
+                                   aria-selected="false">奖金对照表</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="pill" href="#v-random-number"
+                                   aria-selected="false">随机号</a>
+                            </li>
+                        </ul>
+                        <div class="col-lg-2 hidden-sm hidden-xs">
+                            <div class="nav nav-tabs flex-column" style="margin-left: 32px;"
+                                 aria-orientation="vertical">
+                                <a class="nav-link active" data-toggle="pill" href="#v-current-lottery-number"
+                                   aria-selected="true">本期开奖</a>
+                                <a class="nav-link" data-toggle="pill" href="#v-history-lottery-number"
+                                   aria-selected="false">历史开奖</a>
+                                <a class="nav-link" data-toggle="pill" href="#v-trend-chart"
+                                   aria-selected="false">走势图</a>
+                                <a class="nav-link" data-toggle="pill" href="#v-bonus-comparison-table"
+                                   aria-selected="false">奖金对照表</a>
+                                <a class="nav-link" data-toggle="pill" href="#v-random-number"
+                                   aria-selected="false">随机号</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-10 col-md-12 col-sm-12">
+                            <div class="tab-content" id="v-pills-tabContent">
+                                <div class="tab-pane fade show active" id="v-current-lottery-number">
+                                    <div style="width: 100%;">
+                                        <div class="float-left"><p>双色球第<code id="lotteryNo"></code>期,开奖日期<code
+                                                id="lotteryDate"></code></p></div>
+                                        <div class="float-right">
+                                            <p>
+                                                <select onchange="getResultByNo(this.value)" id="lotteryNoSelect">
+
+                                                </select>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <th>开奖号码</th>
+                                            <th><span id="ball-1"
+                                                      style="line-height: 24px;width: 24px;height: 24px;margin-right: 12px;"
+                                                      class="badge badge-dot-xl badge-dot badge-danger"></span>
+                                                <span id="ball-2"
+                                                      style="line-height: 24px;width: 24px;height: 24px;margin-right: 12px;"
+                                                      class="badge badge-dot-xl badge-dot badge-danger"></span>
+                                                <span id="ball-3"
+                                                      style="line-height: 24px;width: 24px;height: 24px;margin-right: 12px;"
+                                                      class="badge badge-dot-xl badge-dot badge-danger"></span>
+                                                <span id="ball-4"
+                                                      style="line-height: 24px;width: 24px;height: 24px;margin-right: 12px;"
+                                                      class="badge badge-dot-xl badge-dot badge-danger"></span>
+                                                <span id="ball-5"
+                                                      style="line-height: 24px;width: 24px;height: 24px;margin-right: 12px;"
+                                                      class="badge badge-dot-xl badge-dot badge-danger"></span>
+                                                <span id="ball-6"
+                                                      style="line-height: 24px;width: 24px;height: 24px;margin-right: 12px;"
+                                                      class="badge badge-dot-xl badge-dot badge-danger"></span>
+                                                <span id="ball-7" style="line-height: 24px;width: 24px;height: 24px;"
+                                                      class="badge badge-dot-xl badge-dot badge-info"></span></th>
+                                        </tr>
+                                        <tr>
+                                            <td>本期销量</td>
+                                            <td id="lotterySaleAmount"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>奖池滚存</td>
+                                            <td id="lotteryPoolAmount"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>兑奖截止日期</td>
+                                            <td id="lotteryExdate"></td>
+                                        </tr>
+                                    </table>
+                                    <p><code>开奖详情</code></p>
+                                    <table class="table table-bordered" id="lottery_detail">
+                                        <thead>
+                                        <tr>
+                                            <td>奖项</td>
+                                            <td>中奖注数</td>
+                                            <td>单注奖金(元)</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="lottery_detail_detail">
+                                        <tr>
+                                            <td>一等奖</td>
+                                            <td id="prizeNum1"></td>
+                                            <td id="prizeAmount1"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>二等奖</td>
+                                            <td id="prizeNum2"></td>
+                                            <td id="prizeAmount2"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>三等奖</td>
+                                            <td id="prizeNum3"></td>
+                                            <td id="prizeAmount3"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>四等奖</td>
+                                            <td id="prizeNum4"></td>
+                                            <td id="prizeAmount4"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>五等奖</td>
+                                            <td id="prizeNum5"></td>
+                                            <td id="prizeAmount5"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>六等奖</td>
+                                            <td id="prizeNum6"></td>
+                                            <td id="prizeAmount6"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="v-history-lottery-number" role="tabpanel">
+                                    <table id="history-lottery-number"></table>
+                                </div>
+                                <div class="tab-pane fade" id="v-trend-chart">
+                                    <p><code>趋势图</code></p>
+                                    <table style="background-color: #EEEEEE;" class="trend-chart table table-bordered ">
+                                        <thead>
+                                        <tr>
+                                            <td rowspan="2">期号</td>
+                                            <td colspan="33" style="color: red;">红球</td>
+                                            <td colspan="16" style="color: blue;">蓝球</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="ball">01</td>
+                                            <td class="ball">02</td>
+                                            <td class="ball">03</td>
+                                            <td class="ball">04</td>
+                                            <td class="ball">05</td>
+                                            <td class="ball">06</td>
+                                            <td class="ball">07</td>
+                                            <td class="ball">08</td>
+                                            <td class="ball">09</td>
+                                            <td class="ball">10</td>
+                                            <td class="ball">11</td>
+                                            <td class="ball">12</td>
+                                            <td class="ball">13</td>
+                                            <td class="ball">14</td>
+                                            <td class="ball">15</td>
+                                            <td class="ball">16</td>
+                                            <td class="ball">17</td>
+                                            <td class="ball">18</td>
+                                            <td class="ball">19</td>
+                                            <td class="ball">20</td>
+                                            <td class="ball">21</td>
+                                            <td class="ball">22</td>
+                                            <td class="ball">23</td>
+                                            <td class="ball">24</td>
+                                            <td class="ball">25</td>
+                                            <td class="ball">26</td>
+                                            <td class="ball">27</td>
+                                            <td class="ball">28</td>
+                                            <td class="ball">29</td>
+                                            <td class="ball">30</td>
+                                            <td class="ball">31</td>
+                                            <td class="ball">32</td>
+                                            <td class="ball">33</td>
+                                            <td class="ball">01</td>
+                                            <td class="ball">02</td>
+                                            <td class="ball">03</td>
+                                            <td class="ball">04</td>
+                                            <td class="ball">05</td>
+                                            <td class="ball">06</td>
+                                            <td class="ball">07</td>
+                                            <td class="ball">08</td>
+                                            <td class="ball">09</td>
+                                            <td class="ball">10</td>
+                                            <td class="ball">11</td>
+                                            <td class="ball">12</td>
+                                            <td class="ball">13</td>
+                                            <td class="ball">14</td>
+                                            <td class="ball">15</td>
+                                            <td class="ball">16</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="trend-chart-body">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="v-bonus-comparison-table">
+                                    <p>奖金对照表</p>
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <td>奖级</td>
+                                            <td>中奖规则</td>
+                                            <td>奖金</td>
+                                        </tr>
+                                        <tr>
+                                            <td>一等奖</td>
+                                            <td><span style="color: red;">6</span> + <span style="color: blue;">1</span>
+                                            </td>
+                                            <td>浮动奖，最高1000万</td>
+                                        </tr>
+                                        <tr>
+                                            <td>二等奖</td>
+                                            <td><span style="color: red;">6</span> + <span style="color: blue;">0</span>
+                                            </td>
+                                            <td>浮动奖</td>
+                                        </tr>
+                                        <tr>
+                                            <td>三等奖</td>
+                                            <td><span style="color: red;">5</span> + <span style="color: blue;">1</span>
+                                            </td>
+                                            <td>3000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>四等奖</td>
+                                            <td><span style="color: red;">5</span> + <span style="color: blue;">0</span>
+                                                / <span style="color: red;">4</span> + <span
+                                                        style="color: blue;">1</span></td>
+                                            <td>200</td>
+                                        </tr>
+                                        <tr>
+                                            <td>五等奖</td>
+                                            <td><span style="color: red;">4</span> + <span style="color: blue;">0</span>
+                                                / <span style="color: red;">3</span> + <span
+                                                        style="color: blue;">1</span></td>
+                                            <td>10</td>
+                                        </tr>
+                                        <tr>
+                                            <td>六等奖</td>
+                                            <td><span style="color: red;">2</span> + <span style="color: blue;">1</span>
+                                                / <span style="color: red;">1</span> + <span
+                                                        style="color: blue;">1</span> / <span
+                                                        style="color: red;">0</span> + <span
+                                                        style="color: blue;">1</span></td>
+                                            <td>5</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="v-random-number">
+                                    <p>随机号码<select onchange="getRandomNumber(this.value);">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                        <option>6</option>
+                                        <option>7</option>
+                                        <option>8</option>
+                                        <option>9</option>
+                                        <option>10</option>
+                                    </select></p>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <td>组数</td>
+                                            <td>红球</td>
+                                            <td>蓝球</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="random-number-tbody">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/popper.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/main.min.js"></script>
+<script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript" src="js/bootstrap-table/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+<script type="text/javascript" src="js/jquery-confirm/jquery-confirm.min.js"></script>
+
+<script type="text/javascript">
+
+    const lotteryId = 'ssq';
+
+    $().ready(function () {
+
+        if (!IsPC()) {
+            showDialog("检测到当前是移动端访问,建议使用横屏查看,效果更佳.");
+        }
+
+        getLatestResult();
+
+        getHistoryLotteryResult();
+
+        getTrendChart();
+
+        getRandomNumber();
+
+    });
+
+    function getLatestResult() {
+        getResultByNo('');
+    }
+
+    function getResultByNo(lotteryNo) {
+        callJQueryAjax('/api/lottery/getLotteryResult.json', {
+            'lotteryId': lotteryId,
+            "lotteryNo": lotteryNo
+        }, function (data) {
+            if (data.success) {
+                let result = data.data;
+                $('#lotteryNo').text(result.lotteryNo);
+                $('#lotteryDate').text(dateFormat('yyyy-MM-dd', new Date(result.lotteryDate)));
+                $('#lotterySaleAmount').text(result.lotterySaleAmount);
+                $('#lotteryPoolAmount').text(result.lotteryPoolAmount);
+                $('#lotteryExdate').text(dateFormat('yyyy-MM-dd', new Date(result.lotteryExdate)));
+                $(result.lotteryRes.split(',')).each(function (index, item) {
+                    $('#ball-' + (index + 1)).text(item);
+                });
+                let lotteryDetail = result.lotteryDetail;
+                if (lotteryDetail != undefined && lotteryDetail != null) {
+                    $('#prizeNum1').text(lotteryDetail.prizeNum1);
+                    $('#prizeNum2').text(lotteryDetail.prizeNum2);
+                    $('#prizeNum3').text(lotteryDetail.prizeNum3);
+                    $('#prizeNum4').text(lotteryDetail.prizeNum4);
+                    $('#prizeNum5').text(lotteryDetail.prizeNum5);
+                    $('#prizeNum6').text(lotteryDetail.prizeNum6);
+                    $('#prizeAmount1').text(lotteryDetail.prizeAmount1);
+                    $('#prizeAmount2').text(lotteryDetail.prizeAmount2);
+                    $('#prizeAmount3').text(lotteryDetail.prizeAmount3);
+                    $('#prizeAmount4').text(lotteryDetail.prizeAmount4);
+                    $('#prizeAmount5').text(lotteryDetail.prizeAmount5);
+                    $('#prizeAmount6').text(lotteryDetail.prizeAmount6);
+                } else {
+                    $('#prizeNum1').text('--');
+                    $('#prizeNum2').text('--');
+                    $('#prizeNum3').text('--');
+                    $('#prizeNum4').text('--');
+                    $('#prizeNum5').text('--');
+                    $('#prizeNum6').text('--');
+                    $('#prizeAmount1').text('--');
+                    $('#prizeAmount2').text('--');
+                    $('#prizeAmount3').text('--');
+                    $('#prizeAmount4').text('--');
+                    $('#prizeAmount5').text('--');
+                    $('#prizeAmount6').text('--');
+                }
+            } else {
+                showDialog(data.msg);
+            }
+        }, '获取最新一期开奖结果失败。', 'get');
+    }
+
+    function getHistoryLotteryResult() {
+        $('#history-lottery-number').bootstrapTable({
+            classes: 'table table-bordered table-hover table-striped',
+            url: '/api/lottery/getHistoryLotteryNumber.json',
+            method: 'get',
+            dataType: 'json',        // 因为本示例中是跨域的调用,所以涉及到ajax都采用jsonp,
+            uniqueId: 'id',
+            idField: 'id',             // 每行的唯一标识字段
+            toolbar: '#toolbar',       // 工具按钮容器
+            //clickToSelect: true,     // 是否启用点击选中行
+            showColumns: true,         // 是否显示所有的列
+            showRefresh: true,         // 是否显示刷新按钮
+            //showToggle: true,        // 是否显示详细视图和列表视图的切换按钮(clickToSelect同时设置为true时点击会报错)
+            pagination: true,                    // 是否显示分页
+            sortOrder: "asc",                    // 排序方式
+            queryParams: function (params) {
+                const temp = {
+                    "lotteryNo": params.search,
+                    "lotteryId": lotteryId,
+                    limit: params.limit,         // 每页数据量
+                    page: (params.offset / params.limit) + 1,
+                };
+                return temp;
+            },                                   // 传递参数
+            responseHandler: function (res) {
+                if (res.success) {
+                    return {
+                        "total": res.data.total,//总页数
+                        "rows": res.data.records   //数据
+                    };
+                } else {
+                    showDialog(res.msg);
+                }
+            },
+            sidePagination: "server",            // 分页方式：client客户端分页，server服务端分页
+            pageNumber: 1,                       // 初始化加载第一页，默认第一页
+            pageSize: 10,                        // 每页的记录行数
+            pageList: [10, 25, 50, 100],         // 可供选择的每页的行数
+            search: true,                        // 是否显示表格搜索，此搜索是客户端搜索
+            //showExport: true,        // 是否显示导出按钮, 导出功能需要导出插件支持(tableexport.min.js)
+            //exportDataType: "basic", // 导出数据类型, 'basic':当前页, 'all':所有数据, 'selected':选中的数据
+            columns: [{
+                field: 'id',
+                title: 'id',
+                class: 'hidden'
+            }, {
+                field: 'lotteryNo',
+                title: '期号'
+            }, {
+                field: 'lotteryRes',
+                title: '开奖号码',
+                formatter: function (value, row, index) {
+                    let html = '';
+                    let res = value.split(',');
+                    $(res).each(function (index, item) {
+                        html += '<span id="ball-1" style="line-height: 24px;width: 24px;height: 24px;margin-right: 12px;" class="badge badge-dot-xl badge-dot badge-danger">' + item + '</span>';
+                        if (res.length - 1 == index) {
+                            html += '<span id="ball-1" style="line-height: 24px;width: 24px;height: 24px;margin-right: 12px;" class="badge badge-dot-xl badge-dot badge-info">' + item + '</span>';
+                        }
+                    });
+                    return html;
+                }
+            }, {
+                field: 'lotteryDate',
+                title: '开奖日期',
+                formatter: function (value, row, index) {
+                    return dateFormat('yyyy-MM-dd', new Date(value));
+                }
+            }, {
+                field: 'lotterySaleAmount',
+                title: '本期销量'
+            }, {
+                field: 'lotterySaleAmount',
+                title: '奖池滚存'
+            }],
+            onLoadSuccess: function (data) {
+                $("[data-toggle='tooltip']").tooltip();
+            }
+        });
+    }
+
+    function getTrendChart() {
+        callJQueryAjax('/api/lottery/getHistoryLotteryNumber.json', {
+            'lotteryId': lotteryId,
+            "page": 1,
+            "limit": 50
+        }, function (data) {
+            if (data.success) {
+                let result = data.data.records;
+                let tBody = $('#trend-chart-body');
+                $(result).each(function (index, item) {
+                    let lotteryRes = item.lotteryRes;
+                    let lotteryNo = item.lotteryNo;
+                    $('#lotteryNoSelect').append('<option>' + lotteryNo + '</option>');
+                    let html = '<tr><td class="ball" id="' + lotteryNo + '">' + lotteryNo + '</td>';
+                    for (let x = 0; x < 33; x++) {
+                        let seq = '';
+                        if (x < 10) {
+                            seq = ("0" + (x + 1));
+                        } else {
+                            seq = x + 1;
+                        }
+                        let id = lotteryNo + '-red-' + seq;
+                        html += '<td class="ball" id="' + id + '">' + seq + '</td>';
+                    }
+                    for (let x = 0; x < 16; x++) {
+                        let seq = '';
+                        if (x < 10) {
+                            seq = ("0" + (x + 1));
+                        } else {
+                            seq = x + 1;
+                        }
+                        let id = lotteryNo + '-blue-' + seq;
+                        html += '<td class="ball" id="' + id + '">' + seq + '</td>';
+                    }
+                    html += '</tr>'
+                    tBody.append(html);
+                    $(lotteryRes.split(',')).each(function (subIndex, num) {
+                        if (subIndex == 6) {
+                            $('#' + lotteryNo + '-blue-' + num).addClass('blue-winning-numbers');
+                        } else {
+                            $('#' + lotteryNo + '-red-' + num).addClass('red-winning-numbers');
+                        }
+                    });
+                });
+            } else {
+                showDialog(data.msg);
+            }
+        }, '获取走势图失败。', 'get');
+    }
+
+    function getRandomNumber(groupQty) {
+        callJQueryAjax('/api/lottery/getRandomNumber.json', {
+            'lotteryId': lotteryId,
+            "groupQty": groupQty
+        }, function (data) {
+            if (data.success) {
+                let result = data.data;
+                $('#random-number-tbody').empty();
+                let tBody = $('#random-number-tbody');
+                $(result).each(function (index, item) {
+                    let size = item.split(',').length;
+                    let html = "<tr><td>第" + (index + 1) + "组</td>";
+                    html += "<td>";
+                    $(item.split(',')).each(function (itemIndex, number) {
+                        if (size - 1 == itemIndex) {
+                            html += "</td><td>";
+                            html += '<span style="line-height: 24px;width: 24px;height: 24px;margin-right: 12px;" class="badge badge-dot-xl badge-dot badge-info">' + number + '</span></td>';
+                        } else {
+                            html += '<span style="line-height: 24px;width: 24px;height: 24px;margin-right: 12px;" class="badge badge-dot-xl badge-dot badge-danger">' + number + '</span>';
+                        }
+                    });
+                    tBody.append(html);
+                });
+            } else {
+                showDialog(data.msg);
+            }
+        }, '获取走势图失败。', 'get');
+    }
+
+    function showAlert(type) {
+        $.confirm({
+            title: type == null ? '取消订阅' : '订阅',
+            //content: 'url:form.html',  // 也可以采用url形式
+            content: '<div class="form-group p-1 mb-0">' +
+                '  <label class="control-label">您的邮箱</label>' +
+                '  <input autofocus="" type="text" id="input-mail" placeholder="请输入您的邮箱" class="form-control">' +
+                '</div>',
+            buttons: {
+                sayMyName: {
+                    text: '提交',
+                    btnClass: 'btn-primary',
+                    action: function () {
+                        const input = this.$content.find('input#input-mail');
+                        const errorText = this.$content.find('.text-danger');
+                        if (!$.trim(input.val())) {
+                            $.alert({
+                                content: "邮箱不能为空。",
+                                type: 'red'
+                            });
+                            return false;
+                        } else {
+                            callJQueryAjax('/api/subscribe/sendVerifyMail.json', {
+                                'lotteryId': lotteryId,
+                                "mail": input.val(),
+                                "type": type
+                            }, function (data) {
+                                if (data.success) {
+                                    showDialog('请注意查收邮件.');
+                                } else {
+                                    showDialog(data.msg);
+                                }
+                            }, '发送邮箱验证链接失败。', 'post');
+                        }
+                    }
+                },
+                '关闭': function () {
+                }
+            }
+        });
+    }
+
+    function showDialog(msg) {
+        $.alert({
+            title: '提示',
+            content: msg,
+            icon: 'mdi mdi-rocket',
+            animation: 'scale',
+            closeAnimation: 'scale',
+            buttons: {
+                okay: {
+                    text: '确认',
+                    btnClass: 'btn-blue'
+                }
+            }
+        });
+    }
+
+</script>
+
+</body>
+</html>

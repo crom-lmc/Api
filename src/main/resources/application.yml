@@ -1,0 +1,49 @@
+server:
+  tomcat:
+    uri-encoding: UTF-8
+  context-path: /api
+
+#聚合数据彩票数据接口key
+polymerization:
+  lottery:
+    key: b819c306f2cd21b13b241ea12525972a
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: AUTO
+  mapper-locations: classpath:/mapper/*.xml
+
+logging:
+  level: debug
+
+spring:
+  profiles:
+    active: local
+  mail:
+    host: smtp.126.com
+    username: laimch@126.com
+    password: MDJAYROIUYWGUECH
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+            port: 465
+          ssl:
+            trust: smtp.126.com
+  thymeleaf:
+    # 禁用缓存
+    cache: false
+    mode: HTML5
+    encoding: UTF-8
+    suffix: .html
+
+mail:
+  fromMail:
+    addr: laimch@126.com
