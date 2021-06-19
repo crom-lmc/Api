@@ -53,4 +53,4 @@
 
 特别感谢以下作者提供的开源组件
 
-1.itshubao（http://lyear.itshubao.com/iframe/v4/）-> 前端ui框架
+1.itshubao (http://lyear.itshubao.com/iframe/v4) -> 前端ui框架
